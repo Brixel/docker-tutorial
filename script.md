@@ -31,7 +31,7 @@ Status: Downloaded newer image for hello-world:latest
 
 Het `docker run` command controleert automatisch of je deze image al hebt. Omdat je bent ingelogged met bij de Docker Hub registry (`docker login`) gaat je docker daemon ook bij deze registry kijken of de image bestaat. Als dat niet zo is, zal docker deze pullen.
 
-### Websites runnen in docker
+## Websites runnen in docker
 Het vorige voorbeeld was een vrij simpel voorbeeld, waarbij de container ook gestopt is na de execution. Veel applicaties zijn echter "forever running", zijn dus constant actief aan het luisteren naar input. Dit kan in de vorm van messages op een queue zijn, maar heel vaak is het ook een HTTP-request. In het volgende voorbeeld gaan we een simpele nginx container starten.
 
 Snippet:
@@ -66,3 +66,16 @@ Wat zien we hier?
 
 Neem nu een browser, en surf naar `http://localhost:80` (de 80 moet zelfs niet, je browser gaat _by default_ naar poort 80 in het geval van HTTP). Je zal hier de standaard nginx webpagina zien.
 
+## Data en docker
+Een van de grootste voordelen van docker is het feit dat je container volledig geisoleerd van je host omgeving draait. Het gevolg is dan ook, dat wanneer je je container stopt, alle data weg is uit deze container. In sommige gevallen niet erg, maar voor websites met dynamische content is dit toch een issue. Typisch gebruik je in dat soort gevallen een database, maar soms is dat _overkill_. Ook maakt deze manier van werken het gebruik van configuratiefiles een stuk moeilijker.
+Om dat toch allemaal makkelijker te maken, kan je volume mapping doen.
+
+We nemen het nginx voorbeeld er even bij. Nginx heeft z'n content meestal in een bepaalde map staan. In het geval van deze image is dat: `/usr/share/nginx/html`. Wat we dus willen doen, is de inhoud van deze folder wijzigen naar iets waar we wel aan kunnen.
+```
+docker run -d -p 80:80 -v ${PWD}\nginx-folder-data\:/usr/share/nginx/html nginx
+```
+
+- ${PWD} is een Powershell shorthand voor de current working directory
+- nginx-folder-data is de folder waar dat de index.html zit die we willen sharen met onze container
+
+Als we dan opnieuw op `http://localhost` kijken, zien we dat onze html gebruikt wordt.
