@@ -79,3 +79,12 @@ docker run -d -p 80:80 -v ${PWD}\nginx-folder-data\:/usr/share/nginx/html nginx
 - nginx-folder-data is de folder waar dat de index.html zit die we willen sharen met onze container
 
 Als we dan opnieuw op `http://localhost` kijken, zien we dat onze html gebruikt wordt.
+
+## Dockerfile
+### Basic Dockerfile
+Meer controle over het opstart proces van de container
+Custom dependencies
+### Multi stage Dockerfiles
+Example
+Markdown input in build
+nginx host in final
