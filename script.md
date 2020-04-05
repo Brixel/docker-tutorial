@@ -29,3 +29,40 @@ Digest: sha256:f9dfddf63636d84ef479d645ab5885156ae030f611a56f3a7ac7f2fdd86d7e4e
 Status: Downloaded newer image for hello-world:latest
 ```
 
+Het `docker run` command controleert automatisch of je deze image al hebt. Omdat je bent ingelogged met bij de Docker Hub registry (`docker login`) gaat je docker daemon ook bij deze registry kijken of de image bestaat. Als dat niet zo is, zal docker deze pullen.
+
+### Websites runnen in docker
+Het vorige voorbeeld was een vrij simpel voorbeeld, waarbij de container ook gestopt is na de execution. Veel applicaties zijn echter "forever running", zijn dus constant actief aan het luisteren naar input. Dit kan in de vorm van messages op een queue zijn, maar heel vaak is het ook een HTTP-request. In het volgende voorbeeld gaan we een simpele nginx container starten.
+
+Snippet:
+
+```
+docker pull nginx/nginx
+docker run -it -d -p 80:80 nginx
+docker ps
+```
+
+Output:
+```
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS
+      NAMES
+9018f6cec0cc        nginx               "nginx -g 'daemon of…"   3 seconds ago       Up 2 seconds        0.0.0.0:80->80/tcp   goofy_lovelace
+```
+Formatted output:
+
+CONTAINER ID | IMAGE | COMMAND | CREATED | STATUS | PORTS | NAMES
+---------|----------|---------|---------|----------|---------|---------
+ 9018f6cec0cc | nginx | "nginx -g 'daemon of…" | 3 seconds ago | up 2 seconds | 0.0.0.0:80->80/tcp | goofy_lovelace
+
+
+Wat zien we hier?
+- Container ID: de door docker gegeneerde Id van de container. Deze is uniek
+- Image: de gebruikte image
+- Command: Het uitgevoerde command dat in de Dockerfile staat
+- Created: Wanneer de image gecreeërd (voor de eerste keer gestart) is
+- Status: de huidige status van de container. Kan ook aangeven dat de container aan het restarten is. In dat geval is er meestal iets mis met de container.
+- Ports: Als de container open poorten nodig heeft om te luisteren naar requests. De `-p 80:80` in de input geeft aan hoe de portmapping moet gebeuren. Formaat: `host:container`
+- Names: Als je wilt kan je je container een beschrijvende naam geven. Als je dat niet doet, zal de docker daemon een eigen naam genereren, zoals in dit geval 'goofy_lovelace'
+
+Neem nu een browser, en surf naar `http://localhost:80` (de 80 moet zelfs niet, je browser gaat _by default_ naar poort 80 in het geval van HTTP). Je zal hier de standaard nginx webpagina zien.
+
