@@ -80,10 +80,15 @@ docker run -d -p 80:80 -v ${PWD}\nginx-folder-data\:/usr/share/nginx/html nginx
 
 Als we dan opnieuw op `http://localhost` kijken, zien we dat onze html gebruikt wordt.
 
-## Dockerfile
+## Dependency management
+In de meeste gevallen is er al een docker image voor jouw situatie. Het is dan ook maar een kwestie van goed te zoeken en de benodigde Google skills boven te halen.
+Echter, in sommige gevallen ga je toch je eigen docker image moeten maken.
+In ons geval gaan wij het volgende doen:
+Het script dat ik nu aan het volgen ben is geschreven in markdown, een manier om tekst te stylen in een leesbare plain text manier. Typisch worden markdown files geconverteerd naar HTML, zodat het vlot kan gerenderd worden in een browser. Er bestaan talloze markdown renderers, in allerlei verschillende talen. Maar dat zijn dus ook allemaal dependencies. En wat kunnen we met dependencies doen? Inderdaad: Dockerizen.
 ### Basic Dockerfile
-Meer controle over het opstart proces van de container
-Custom dependencies
+Hoe genereer je nu een docker image? Aan de hand van een Dockerfile. Dockerfiles zijn in feite niets meer dan een textuele beschrijving van hoe je docker image eruit gaat zien.
+
+
 ### Multi stage Dockerfiles
 Example
 Markdown input in build
