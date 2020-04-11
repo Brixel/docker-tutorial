@@ -36,14 +36,14 @@ Het vorige voorbeeld was een vrij simpel voorbeeld, waarbij de container ook ges
 
 Snippet:
 
-```
+```bash
 docker pull nginx/nginx
 docker run -it -d -p 80:80 nginx
 docker ps
 ```
 
 Output:
-```
+```bash
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS
       NAMES
 9018f6cec0cc        nginx               "nginx -g 'daemon of…"   3 seconds ago       Up 2 seconds        0.0.0.0:80->80/tcp   goofy_lovelace
@@ -71,12 +71,12 @@ Een van de grootste voordelen van docker is het feit dat je container volledig g
 Om dat toch allemaal makkelijker te maken, kan je volume mapping doen.
 
 We nemen het nginx voorbeeld er even bij. Nginx heeft z'n content meestal in een bepaalde map staan. In het geval van deze image is dat: `/usr/share/nginx/html`. Wat we dus willen doen, is de inhoud van deze folder wijzigen naar iets waar we wel aan kunnen.
-```
+```bash
 docker run -d -p 80:80 -v ${PWD}\nginx-folder-data\:/usr/share/nginx/html nginx
 ```
 
-- ${PWD} is een Powershell shorthand voor de current working directory
-- nginx-folder-data is de folder waar dat de index.html zit die we willen sharen met onze container
+- `${PWD}` is een Powershell shorthand voor de current working directory
+- `nginx-folder-data` is de folder waar dat de index.html zit die we willen sharen met onze container
 
 Als we dan opnieuw op `http://localhost` kijken, zien we dat onze html gebruikt wordt.
 
