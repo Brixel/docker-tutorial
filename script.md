@@ -87,8 +87,18 @@ In ons geval gaan wij het volgende doen:
 Het script dat ik nu aan het volgen ben is geschreven in markdown, een manier om tekst te stylen in een leesbare plain text manier. Typisch worden markdown files geconverteerd naar HTML, zodat het vlot kan gerenderd worden in een browser. Er bestaan talloze markdown renderers, in allerlei verschillende talen. Maar dat zijn dus ook allemaal dependencies. En wat kunnen we met dependencies doen? Inderdaad: Dockerizen.
 ### Basic Dockerfile
 Hoe genereer je nu een docker image? Aan de hand van een Dockerfile. Dockerfiles zijn in feite niets meer dan een textuele beschrijving van hoe je docker image eruit gaat zien.
+#### Syntax
+- `FROM`: geeft aan van welke base image je code start
+- `COPY`: zorgt voor het kopieren van content van je host naar je container
+- `RUN`: voert commando's in de container uit. Veel gebruikt om dependencies te installeren
 
-
+Ale je eenmaal een Dockerfile in elkaar hebt gepuzzeld, kan je hier een image van maken:
+```bash
+docker build -t pythonmarkdown .
+```
+#### Syntax
+- `-t pythonmarkdown`: maakt een docker image met als tag 'pythonmarkdown' aan. Voorbeelden: `-t pythonmarkdown:latest`, `-t pythonmarkdown:1.1`, `-t pythonmarkdown:alpine-1.1`
+- `.` geeft de locatie van de context aan die je naar de container wilt sturen. De `COPY` _source_ wijst naar de root in de context aan 
 
 ### Multi stage Dockerfiles
 Example
