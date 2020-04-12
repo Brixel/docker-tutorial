@@ -72,7 +72,7 @@ Om dat toch allemaal makkelijker te maken, kan je volume mapping doen.
 
 We nemen het nginx voorbeeld er even bij. Nginx heeft z'n content meestal in een bepaalde map staan. In het geval van deze image is dat: `/usr/share/nginx/html`. Wat we dus willen doen, is de inhoud van deze folder wijzigen naar iets waar we wel aan kunnen.
 ```bash
-docker run -d -p 80:80 -v ${PWD}\nginx-folder-data\:/usr/share/nginx/html nginx
+docker run -d -p 80:80 -v ${PWD}\examples\volumes\nginx-folder-data\:/usr/share/nginx/html nginx
 ```
 
 - `${PWD}` is een Powershell shorthand voor de current working directory
@@ -87,6 +87,7 @@ In ons geval gaan wij het volgende doen:
 Het script dat ik nu aan het volgen ben is geschreven in markdown, een manier om tekst te stylen in een leesbare plain text manier. Typisch worden markdown files geconverteerd naar HTML, zodat het vlot kan gerenderd worden in een browser. Er bestaan talloze markdown renderers, in allerlei verschillende talen. Maar dat zijn dus ook allemaal dependencies. En wat kunnen we met dependencies doen? Inderdaad: Dockerizen.
 ### Basic Dockerfile
 Hoe genereer je nu een docker image? Aan de hand van een Dockerfile. Dockerfiles zijn in feite niets meer dan een textuele beschrijving van hoe je docker image eruit gaat zien.
+
 
 
 ### Multi stage Dockerfiles
