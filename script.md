@@ -2,9 +2,9 @@
 
 ## Wat is docker?
 ### Virtualisatie en isolatie
-In eerste instantie een light-weight virtualizatie platform, dat vanuit images werkende applicatie beheert. De focus ligt hierbij wel op één applicatie per container. Dit heeft als voordeel dat de image alleen maar de dependencies van die ene applicatie erin zitten. 
+In eerste instantie een light-weight virtualizatieplatform, dat door middel van containers werkende applicatie beheert. De focus ligt hierbij wel op één applicatie per container. Dit heeft als voordeel dat de image alleen maar de dependencies van die ene applicatie erin zitten. 
 
-### Cross platform
+### Crossplatform
 Docker is beschikbaar voor Linux, Mac en Windows.
 Omdat Docker een virtualizatieplatform is, moet het ergens in gehost worden. In Linux kan dit rechstreeks, maar bij Mac en Windows moet dit vaak nog via een virtualizatielaag, een zogenaamde hypervisor.
 Je kan echter wel Linux en Windows images gebruiken, maar deze containers moeten uiteraard wel in de juiste Docker omgeving runnen. In de meeste gevallen zal je werken met Linux containers, omdat deze vaak een veel kleinere _footprint_ hebben dan Windows containers.
@@ -12,7 +12,7 @@ Je kan echter wel Linux en Windows images gebruiken, maar deze containers moeten
 
 ## Hands-on terminal magic
 Om docker te gebruiken zal je toch af en toe de terminal in moeten duiken, maar vaak blijft het gebruik redelijk beperkt.
-Om te kijken of je docker installatie succesvol is, is er  een image die kan runnen. Om deze te downloaden, zal je echter nog een account moeten maken op een registry. De bekendste is Docker Hub, maar je kan ook je eigen registry op zetten voor je eigen images op te zetten. Het voordeel van deze _private_ registries is dat je typisch alleen jezelf access kan geven aan deze images. Docker Hub is een publieke, en alles wat hier op geupload wordt kan worden gedownload worden. Overigens spreekt men bij docker niet over downloaden, maar over _pullen_.
+Om te kijken of je docker installatie succesvol is, is er  een image die kan runnen. Om deze te downloaden, zal je echter nog een account moeten maken op een registry. De bekendste is Docker Hub, maar je kan ook je eigen registry op zetten om je eigen images te hosten. Het voordeel van deze _private_ registries is dat je typisch alleen jezelf access kan geven aan deze images. Docker Hub is een publieke, en alles wat hier op geupload wordt kan worden gedownload worden. Overigens spreekt men bij docker niet over downloaden, maar over _pullen_.
 Software ontwikkelaars die nu een belletje horen rinkelen en aan Git, het versiebeheersysteem denken: er zijn nog andere overeenkomsten. Maar daar kom ik nog opo terug.
 Laten we beginnen met de typische hello-world image te runnen.
 
@@ -32,7 +32,7 @@ Status: Downloaded newer image for hello-world:latest
 Het `docker run` command controleert automatisch of je deze image al hebt. Omdat je bent ingelogged met bij de Docker Hub registry (`docker login`) gaat je docker daemon ook bij deze registry kijken of de image bestaat. Als dat niet zo is, zal docker deze pullen.
 
 ## Websites runnen in docker
-Het vorige voorbeeld was een vrij simpel voorbeeld, waarbij de container ook gestopt is na de execution. Veel applicaties zijn echter "forever running", zijn dus constant actief aan het luisteren naar input. Dit kan in de vorm van messages op een queue zijn, maar heel vaak is het ook een HTTP-request. In het volgende voorbeeld gaan we een simpele nginx container starten.
+Het vorige voorbeeld was een vrij simpel voorbeeld, waarbij de container ook gestopt is na de execution. Veel applicaties zijn echter "forever running", zijn dus constant actief aan het luisteren naar input. Vaak is deze input in de vorm van een HTTP-request, maar ook messages op een queue kunnen als input dienen. In het volgende voorbeeld gaan we een simpele nginx container starten.
 
 Snippet:
 
@@ -84,7 +84,7 @@ Als we dan opnieuw op `http://localhost` kijken, zien we dat onze html gebruikt 
 In de meeste gevallen is er al een docker image voor jouw situatie. Het is dan ook maar een kwestie van goed te zoeken en de benodigde Google skills boven te halen.
 Echter, in sommige gevallen ga je toch je eigen docker image moeten maken.
 In ons geval gaan wij het volgende doen:
-Het script dat ik nu aan het volgen ben is geschreven in markdown, een manier om tekst te stylen in een leesbare plain text manier. Typisch worden markdown files geconverteerd naar HTML, zodat het vlot kan gerenderd worden in een browser. Er bestaan talloze markdown renderers, in allerlei verschillende talen. Maar dat zijn dus ook allemaal dependencies. En wat kunnen we met dependencies doen? Inderdaad: Dockerizen.
+Het script dat ik nu aan het volgen ben is geschreven in markdown, een manier om tekst te stylen in een leesbare plain text manier. Markdown files worden geconverteerd naar HTML, zodat het vlot kan gerenderd worden in een browser. Er bestaan talloze markdown renderers, in allerlei verschillende talen. Maar dat zijn dus ook allemaal dependencies. En wat kunnen we met dependencies doen? Inderdaad: Dockerizen.
 ### Basic Dockerfile
 Hoe genereer je nu een docker image? Aan de hand van een Dockerfile. Dockerfiles zijn in feite niets meer dan een textuele beschrijving van hoe je docker image eruit gaat zien.
 #### Syntax
@@ -101,6 +101,7 @@ docker build -t pythonmarkdown .
 - `.` geeft de locatie van de context aan die je naar de container wilt sturen. De `COPY` _source_ wijst naar de root in de context aan 
 
 ### Multi stage Dockerfiles
-Example
-Markdown input in build
-nginx host in final
+
+De simpele Dockerfile die we nu hebben genereert dus nu een HTML file. Echter zit deze nu in de `output` folder in de docker container. In principe zouden wie hier via een paar omwegen wel aankunnen (volume mapping, aan de docker container zelf attachen, ...), maar in dit geval willen we toch dat die HTML in een website komt te staan. Wat je dan kan doen is in je bestaande Dockerfile ook nog eens de nginx configuratie zetten, maar dan heb je dus nog een extra dependency in je container. Extra dependencies betekent ook een grotere container.
+Je kan dus in dit geval beter een multi-stage Dockerfile creeeren: eerst je "build" fase, gevolgd door de effectieve "run" fase.
+Concreet komt het er op neer dat je meerdere `FROM` statements gebruikt, met als gevolg dat je eerst een grotere "build" image kan gebruiken, gevolgd door een veel lichtere "run" image. In het voorbeeld zie je dat ik in m'n build fase een `node` image gebruik. Deze heb ik nodig om m'n HTML te genereren. De `nginx:alpine` image is echter een heel lichtgewicht image, en dat is ook de image die uiteindelijk zal runnen en gepullen worden. Veel interessanter dan die `node` image.
